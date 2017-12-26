@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/jquery-ui.css" />
+</head>
+<body>
+<form>
+    <div><label for="name">书名</label><input id="name" type="text"></div>
+    <div><label for="author">作者</label><input id="author" type="text"></div>
+    <div><label for="press">出版社</label><input id="press" type="text"></div>
+    <div><label for="price">价格</label><input id="price" type="text"></div>
+    <div><label for="pubDate">出版日期</label><input id="pubDate" type="date"></div>
+    <div>
+        <button id="save-btn" type="button">保存</button>
+    </div>
+</form>
+<div id="msg-dialog" title="消息">
+    <p id="msg-p"></p>
+</div>
+<script src="../js/jquery-3.2.1.js"></script>
+<script src="../js/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#save-btn").click(save);
+    });
+
+    let save = function () {
+        let book = {
+            "name":$("#name").val(),
+            "author":$("#author").val(),
+            "press":$("#press").val(),
+            "price":$("#price").val(),
+            "pubDate":$("#pubDate").val()
+        };
+        let bookStr = JSON.stringify(book);
+        $.ajax({
+            url:"save.do",
+            type:"POST",
+            data:bookStr,
+            dataType:"json",
+            contentType:"application/json"
+        }).then(function (message) {
+            $("#msg-p").text(message.msg);
+            $("#msg-dialog").dialog().dialog('open');
+            $("form").get(0).reset();
+        },function (xhr) {
+            alert(xhr.responseText);
+        })
+    };
+</script>
+</body>
+</html>
